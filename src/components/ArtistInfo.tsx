@@ -1,25 +1,46 @@
+import axios from "axios";
+import { useQueryClient } from "react-query";
 import useArtist from "../hooks/useArtist";
 
 interface Props {
-  name: string;
+	artist: string;
+	userId: string;
 }
 
-export default function ArtistInfo({ name }: Props) {
-  const { data, isLoading, error } = useArtist(name);
-  // console.log("unutar", data);
-  return (
-    <div>
-      {isLoading ? (
-        <div>loading</div>
-      ) : (
-        <main>
-          <div>{data?.bio}</div>
-          <div>{data?.message}</div>
-          <div>{data?.name}</div>
-          <div>{data?.listeners}</div>
-          <div>{data?.playcount}</div>
-        </main>
-      )}
-    </div>
-  );
+export default function ArtistInfo({ artist, userId }: Props) {
+	const { data, isLoading, error } = useArtist(artist);
+	const queryClient = useQueryClient();
+	return (
+		<div>
+			{isLoading ? (
+				<div>loading</div>
+			) : error ? (
+				<div>error</div>
+			) : (
+				<main>
+					<div>{data?.message}</div>
+
+					{data?.message === undefined && (
+						<div>
+							<div>Artist: {data?.name}</div>
+							<div>Bio: {data?.bio}</div>
+							<div>Listeners: {data?.listeners}</div>
+							<div>Total plays: {data?.playcount}</div>
+							<button
+								onClick={() => {
+									console.log(data?.name);
+									axios.put(`http://localhost:5000/userFavourites/${userId}`, {
+										name: data?.name,
+									});
+									queryClient.refetchQueries(["user", userId]);
+								}}
+							>
+								save artist to favourites
+							</button>
+						</div>
+					)}
+				</main>
+			)}
+		</div>
+	);
 }

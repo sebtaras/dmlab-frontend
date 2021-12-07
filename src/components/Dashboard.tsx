@@ -1,31 +1,86 @@
 import { useState } from "react";
+import { useUser } from "../hooks/useUser";
 import ArtistInfo from "./ArtistInfo";
 import "./Dashboard.css";
-//f9d45957168692bb80e1b88caf973c55
-export default function Dashboard() {
-  const [input, setInput] = useState("");
-  const [artistName, setArtistName] = useState("");
+import Favourites from "./Favourites";
+import LocationInfo from "./LocationInfo";
 
-  return (
-    <div className="main-container">
-      <div className="search-container">
-        <input
-          className="search-bar"
-          placeholder="Artist name"
-          onChange={(e) => setInput(e.target.value)}
-          value={input}
-        ></input>
-        <button
-          className="search-button"
-          onClick={async () => {
-            setArtistName(input);
-          }}
-        >
-          Okini
-        </button>
-      </div>
-      <ArtistInfo name={artistName} />
-    </div>
-  );
+// LASTFM api key
+//f9d45957168692bb80e1b88caf973c55
+
+// OPEN WEATHER api key
+//4a74f98b8710481cf51a70339eaffaa3
+
+interface Props {
+	setToken: Function;
+	userId: string;
+	setUserId: Function;
+}
+
+export default function Dashboard({ setToken, userId, setUserId }: Props) {
+	const [artistInput, setArtistInput] = useState("");
+	const [artistName, setArtistName] = useState("");
+	const [locationInput, setLocationInput] = useState("");
+	const [locationName, setLocationName] = useState("");
+	const { data, error, isLoading } = useUser(userId);
+
+	console.log("data", data);
+	return (
+		<div className="main-container">
+			<button
+				onClick={() => {
+					localStorage.clear();
+					setToken(null);
+					setUserId(null);
+				}}
+			>
+				logout
+			</button>
+			<LocationInfo
+				savedLocation={data?.location}
+				location={locationName}
+				userId={userId}
+			/>
+			<div className="search-container">
+				<input
+					className="search-bar"
+					placeholder="Artist name"
+					onChange={(e) => setArtistInput(e.target.value)}
+					value={artistInput}
+				></input>
+				<button
+					className="search-button"
+					onClick={async () => {
+						setArtistName(artistInput);
+					}}
+				>
+					Okini Artista
+				</button>
+			</div>
+			<div className="search-container">
+				<input
+					className="search-bar"
+					placeholder="Your city"
+					onChange={(e) => setLocationInput(e.target.value)}
+					value={locationInput}
+				></input>
+				<button
+					className="search-button"
+					onClick={async () => {
+						setLocationName(locationInput);
+					}}
+				>
+					Okini Lokaciju
+				</button>
+			</div>
+			{isLoading ? (
+				<div>Loading Favourites</div>
+			) : (
+				<Favourites favourites={data.artists} />
+			)}
+			<br />
+			<ArtistInfo artist={artistName} userId={userId} />
+		</div>
+	);
 }
 //099 2667 419 - skorupan
