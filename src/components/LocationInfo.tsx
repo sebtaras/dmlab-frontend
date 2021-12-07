@@ -13,7 +13,6 @@ export default function LocationInfo({ location, userId, savedLocation }: Props)
 	const { data, isLoading, error } = useLocation(
 		location !== "" ? location : savedLocation
 	);
-	console.log(location, savedLocation);
 	return (
 		<div>
 			{isLoading ? (
@@ -30,11 +29,12 @@ export default function LocationInfo({ location, userId, savedLocation }: Props)
 								{data?.temperature}
 							</div>
 							<button
-								onClick={() => {
-									console.log(location);
-									axios.put(`http://localhost:5000/userLocation/${userId}`, {
-										location,
-									});
+								onClick={async () => {
+									if (location !== "") {
+										await axios.put(`http://localhost:5000/userLocation/${userId}`, {
+											location,
+										});
+									}
 								}}
 							>
 								Save location

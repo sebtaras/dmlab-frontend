@@ -11,7 +11,7 @@ function App() {
 	const [token, setToken] = useState<string | null>(null);
 	const [userId, setUserId] = useState<string | null>(null);
 	const queryClient = new QueryClient();
-	console.log(token, userId);
+
 	useEffect(() => {
 		const storedToken = localStorage.getItem("accessToken");
 		const storedId = localStorage.getItem("userId");

@@ -27,9 +27,9 @@ export default function ArtistInfo({ artist, userId }: Props) {
 							<div>Listeners: {data?.listeners}</div>
 							<div>Total plays: {data?.playcount}</div>
 							<button
-								onClick={() => {
-									console.log(data?.name);
-									axios.put(`http://localhost:5000/userFavourites/${userId}`, {
+								onClick={async () => {
+									await axios.put(`http://localhost:5000/userFavourites/${userId}`, {
+										action: "add",
 										name: data?.name,
 									});
 									queryClient.refetchQueries(["user", userId]);

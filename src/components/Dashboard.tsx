@@ -24,7 +24,6 @@ export default function Dashboard({ setToken, userId, setUserId }: Props) {
 	const [locationName, setLocationName] = useState("");
 	const { data, error, isLoading } = useUser(userId);
 
-	console.log("data", data);
 	return (
 		<div className="main-container">
 			<button
@@ -36,27 +35,18 @@ export default function Dashboard({ setToken, userId, setUserId }: Props) {
 			>
 				logout
 			</button>
+			{isLoading ? (
+				<div>loading</div>
+			) : error ? (
+				<div>error</div>
+			) : (
+				<div>WELCOME {data.name}</div>
+			)}
 			<LocationInfo
 				savedLocation={data?.location}
 				location={locationName}
 				userId={userId}
 			/>
-			<div className="search-container">
-				<input
-					className="search-bar"
-					placeholder="Artist name"
-					onChange={(e) => setArtistInput(e.target.value)}
-					value={artistInput}
-				></input>
-				<button
-					className="search-button"
-					onClick={async () => {
-						setArtistName(artistInput);
-					}}
-				>
-					Okini Artista
-				</button>
-			</div>
 			<div className="search-container">
 				<input
 					className="search-bar"
@@ -73,14 +63,30 @@ export default function Dashboard({ setToken, userId, setUserId }: Props) {
 					Okini Lokaciju
 				</button>
 			</div>
+			<div className="search-container">
+				<input
+					className="search-bar"
+					placeholder="Artist name"
+					onChange={(e) => setArtistInput(e.target.value)}
+					value={artistInput}
+				></input>
+				<button
+					className="search-button"
+					onClick={async () => {
+						setArtistName(artistInput);
+					}}
+				>
+					Okini Artista
+				</button>
+			</div>
+
 			{isLoading ? (
 				<div>Loading Favourites</div>
 			) : (
-				<Favourites favourites={data.artists} />
+				<Favourites favourites={data.artists} userId={userId} />
 			)}
 			<br />
 			<ArtistInfo artist={artistName} userId={userId} />
 		</div>
 	);
 }
-//099 2667 419 - skorupan

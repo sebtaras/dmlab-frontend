@@ -18,8 +18,6 @@ const getLocationInfo = async (name: string): Promise<Response> => {
 		`https://api.openweathermap.org/data/2.5/weather?q=${name.trim()}&units=metric&APPID=4a74f98b8710481cf51a70339eaffaa3`
 	);
 
-	console.log(data);
-
 	return {
 		temperature: data.main.temp,
 	};

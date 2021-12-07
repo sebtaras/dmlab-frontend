@@ -4,6 +4,8 @@ import { useQuery } from "react-query";
 type Response = {
 	error?: number;
 	message?: string;
+	email?: string;
+	name?: string;
 	artists?: [string];
 	location?: null | string;
 };
@@ -16,9 +18,10 @@ const getUser = async (id: string): Promise<Response> => {
 		};
 	}
 	const { data } = await axios.get(`http://localhost:5000/user/${id}`);
-	console.log(data);
 
 	return {
+		email: data.email,
+		name: data.name,
 		artists: data.artists,
 		location: data.location,
 	};

@@ -16,7 +16,6 @@ export default function LoginForm({ setToken, setUserId }: Props) {
 				name: fbResponse.name,
 				email: fbResponse.email,
 			});
-			// console.log("Login result:", result.data);
 			localStorage.setItem("accessToken", fbResponse.accessToken);
 			localStorage.setItem("userId", fbResponse.id);
 			setToken(fbResponse.accessToken);
